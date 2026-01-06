@@ -1,5 +1,5 @@
 {
-  "name": "template-mcp-server-workspace",
+  "name": "jobsuche-mcp-server-workspace",
   "version": "0.1.0",
   "private": true,
   "description": "Template MCP server workspace - actual npm package is in npm/ directory",

@@ -1,10 +1,10 @@
 {
-  "name": "@yourusername/template-mcp-server",
+  "name": "@mihai-satmarean/jobsuche-mcp-server",
   "version": "0.1.0",
-  "description": "Template MCP Server - A Model Context Protocol server template using PulseEngine MCP framework",
+  "description": "Jobsuche MCP Server - A Model Context Protocol server for German Federal Employment Agency job search",
   "main": "index.js",
   "bin": {
-    "template-mcp-server": "./run.js"
+    "jobsuche-mcp-server": "./run.js"
   },
   "scripts": {
     "postinstall": "node install.js",
@@ -22,17 +22,17 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/template-mcp-server.git"
+    "url": "https://github.com/mihai-satmarean/jobsuche-mcp-server.git"
   },
-  "homepage": "https://github.com/yourusername/template-mcp-server",
+  "homepage": "https://github.com/mihai-satmarean/jobsuche-mcp-server",
   "bugs": {
-    "url": "https://github.com/yourusername/template-mcp-server/issues"
+    "url": "https://github.com/mihai-satmarean/jobsuche-mcp-server/issues"
   },
   "optionalDependencies": {
-    "@yourusername/template-mcp-server-darwin-arm64": "0.1.0",
-    "@yourusername/template-mcp-server-darwin-x64": "0.1.0",
-    "@yourusername/template-mcp-server-linux-x64": "0.1.0",
-    "@yourusername/template-mcp-server-win32-x64": "0.1.0"
+    "@mihai-satmarean/jobsuche-mcp-server-darwin-arm64": "0.1.0",
+    "@mihai-satmarean/jobsuche-mcp-server-darwin-x64": "0.1.0",
+    "@mihai-satmarean/jobsuche-mcp-server-linux-x64": "0.1.0",
+    "@mihai-satmarean/jobsuche-mcp-server-win32-x64": "0.1.0"
   },
   "engines": {
     "node": ">=14"

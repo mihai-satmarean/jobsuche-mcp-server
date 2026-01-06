@@ -1,7 +1,7 @@
 {
-  "name": "@yourusername/template-mcp-server-win32-x64",
+  "name": "@mihai-satmarean/jobsuche-mcp-server-win32-x64",
   "version": "0.1.0",
-  "description": "Template MCP Server binary for Windows x64",
+  "description": "Jobsuche MCP Server binary for Windows x64",
   "main": "index.js",
   "os": [
     "win32"
@@ -11,16 +11,16 @@
   ],
   "keywords": [
     "mcp",
-    "template",
+    "jobsuche",
     "binary",
     "windows",
     "x64"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "Mihai Satmarean <mihai@satmarean.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/template-mcp-server.git"
+    "url": "https://github.com/mihai-satmarean/jobsuche-mcp-server.git"
   },
   "publishConfig": {
     "access": "public"

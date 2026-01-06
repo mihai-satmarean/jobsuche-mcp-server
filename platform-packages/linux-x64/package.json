@@ -1,7 +1,7 @@
 {
-  "name": "@yourusername/template-mcp-server-linux-x64",
+  "name": "@mihai-satmarean/jobsuche-mcp-server-linux-x64",
   "version": "0.1.0",
-  "description": "Template MCP Server binary for Linux x64",
+  "description": "Jobsuche MCP Server binary for Linux x64",
   "main": "index.js",
   "os": [
     "linux"
@@ -11,16 +11,16 @@
   ],
   "keywords": [
     "mcp",
-    "template",
+    "jobsuche",
     "binary",
     "linux",
     "x64"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "Mihai Satmarean <mihai@satmarean.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/template-mcp-server.git"
+    "url": "https://github.com/mihai-satmarean/jobsuche-mcp-server.git"
   },
   "publishConfig": {
     "access": "public"
