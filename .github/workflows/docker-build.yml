@@ -5,24 +5,12 @@ on:
     branches:
       - main
       - master
-    paths:
-      - 'jobsuche-mcp-server/**'
-      - '.github/workflows/docker-build.yml'
-      - 'Dockerfile'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
     tags:
       - 'v*'
   pull_request:
     branches:
       - main
       - master
-    paths:
-      - 'jobsuche-mcp-server/**'
-      - '.github/workflows/docker-build.yml'
-      - 'Dockerfile'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
   workflow_dispatch:
 
 env:
