@@ -1,0 +1,7 @@
+platform-packages/*
+npm/*
+scripts/*
+.github/*
+target/*
+.pre-commit-config.yaml
+
