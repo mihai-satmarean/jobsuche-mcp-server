@@ -103,3 +103,5 @@ containerizedConfig:
   image: "ghcr.io/mihai-satmarean/jobsuche-mcp-server:latest"
   port: 3000
   path: "/mcp"
+
+version: "0.0.1"
