@@ -91,9 +91,11 @@ jobs:
       - name: Setup kubectl
         if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         uses: azure/setup-kubectl@v3
+        continue-on-error: true
 
       - name: Configure kubeconfig
         if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        continue-on-error: true
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
@@ -101,6 +103,7 @@ jobs:
 
       - name: Find and restart deployment
         if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        continue-on-error: true
         run: |
           echo "Finding deployment using our image..."
           
