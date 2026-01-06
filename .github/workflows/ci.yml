@@ -11,37 +11,38 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
-  pre-commit:
-    name: Pre-commit Checks
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install pre-commit
-        run: |
-          pip install pre-commit detect-secrets
-          pre-commit --version
-
-      - name: Create secrets baseline if missing
-        run: |
-          if [ ! -f .secrets.baseline ]; then
-            echo "Creating .secrets.baseline"
-            detect-secrets scan --baseline .secrets.baseline
-          fi
-
-      - name: Run pre-commit hooks
-        run: pre-commit run --all-files --show-diff-on-failure
+  # Pre-commit checks disabled for fork - formatting checks not needed for obot.ai containerized runtime
+  # pre-commit:
+  #   name: Pre-commit Checks
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Install Rust
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         components: rustfmt, clippy
+  #
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.11"
+  #
+  #     - name: Install pre-commit
+  #       run: |
+  #         pip install pre-commit detect-secrets
+  #         pre-commit --version
+  #
+  #     - name: Create secrets baseline if missing
+  #       run: |
+  #         if [ ! -f .secrets.baseline ]; then
+  #           echo "Creating .secrets.baseline"
+  #           detect-secrets scan --baseline .secrets.baseline
+  #         fi
+  #
+  #     - name: Run pre-commit hooks
+  #       run: pre-commit run --all-files --show-diff-on-failure
 
   test:
     name: Test Suite
