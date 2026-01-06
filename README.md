@@ -82,6 +82,26 @@ Add to your Continue configuration:
 }
 ```
 
+### obot.ai
+
+Add to your obot.ai MCP catalog using containerized runtime:
+
+```yaml
+name: Jobsuche MCP Server
+runtime: containerized
+containerizedConfig:
+  image: 'ghcr.io/mihai-satmarean/jobsuche-mcp-server:latest'
+  port: 3000
+  path: '/mcp'
+  env:
+    JOBSUCHE_API_URL: "${JOBSUCHE_API_URL}"
+    JOBSUCHE_API_KEY: "${JOBSUCHE_API_KEY}"
+    JOBSUCHE_DEFAULT_PAGE_SIZE: "25"
+    JOBSUCHE_MAX_PAGE_SIZE: "100"
+```
+
+For complete obot.ai YAML definition with all tools and metadata, see: [jobsuche.yaml](https://github.com/mihai-satmarean/jobsuche-mcp-server/blob/main/jobsuche.yaml)
+
 ## Available Tools
 
 ### 1. `search_jobs`

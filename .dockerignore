@@ -1,0 +1,37 @@
+# Build artifacts
+target/
+
+# Git
+.git/
+.github/
+
+# Logs
+*.log
+build.log
+
+# NPM packages (used for distribution, not needed in Docker)
+npm/
+platform-packages/
+node_modules/
+
+# Development files
+.secrets.baseline
+.pre-commit-config.yaml
+requirements-dev.txt
+.markdownlint.json
+.npmignore
+
+# Documentation (kept in repo, not needed in image)
+CONTRIBUTING.md
+PUBLISHING.md
+CHANGELOG.md
+
+# CI/CD
+.github/workflows/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+

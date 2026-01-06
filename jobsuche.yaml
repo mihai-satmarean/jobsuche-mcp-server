@@ -1,0 +1,111 @@
+name: Jobsuche MCP Server
+description: |
+  A Model Context Protocol (MCP) server that provides comprehensive integration with the German Federal Employment Agency (Bundesagentur für Arbeit) job search API. Search and access German job listings with AI-friendly semantic parameters.
+
+  ## Features
+  - **AI-Friendly Interface**: Simple, semantic parameters for natural language job searching
+  - **Official API Integration**: Uses the official Bundesagentur für Arbeit API for reliable, real-time job data
+  - **Rich Filtering**: Search by location, job title, employment type, contract type, employer, industry branch, and more
+  - **Comprehensive Details**: Get full job information including descriptions, requirements, salary, and application details
+  - **Batch Operations**: Efficiently search multiple job criteria or fetch multiple job details in a single operation
+  - **Pagination Support**: Handle large result sets efficiently with configurable page sizes
+  - **Field Filtering**: Customize which fields to include/exclude in responses for optimal token usage
+  - **Rate Limiting**: Built-in automatic delays to respect API rate limits
+  - **Zero Configuration**: Works out of the box with sensible defaults
+
+  ## What you'll need to connect
+  **Optional:**
+  - **JOBSUCHE_API_URL**: Custom API base URL (default: official Bundesagentur für Arbeit API)
+  - **JOBSUCHE_API_KEY**: Custom API key (default: public API key)
+  - **JOBSUCHE_DEFAULT_PAGE_SIZE**: Default results per page (default: 25)
+  - **JOBSUCHE_MAX_PAGE_SIZE**: Maximum results per page (default: 100)
+
+  **Note:** All environment variables are optional. The server works with default public API access.
+
+toolPreview:
+  - name: search_jobs
+    description: Search for jobs in Germany using various filters (job title, location, employment type, contract type, employer, industry branch, etc.)
+    params:
+      job_title: Job title or keywords (e.g., "Software Engineer", "Data Scientist") (optional)
+      location: Location name (e.g., "Berlin", "München", "Deutschland") (optional)
+      radius_km: Search radius in kilometers from the location (optional)
+      employment_type: Employment type filter - fulltime, parttime, mini_job, home_office, shift (optional, array)
+      contract_type: Contract type filter - permanent, temporary (optional, array)
+      published_since_days: Days since publication (0-100, default 30) (optional)
+      page_size: Number of results per page (1-100) (optional)
+      page: Page number for pagination (starting from 1) (optional)
+      employer: Employer name to search for (optional)
+      branch: Industry/branch to search in (e.g., "IT", "Gesundheitswesen") (optional)
+  - name: get_job_details
+    description: Get detailed information about a specific job posting including full description, requirements, salary, and application details
+    params:
+      reference_number: Job reference number from search results (required)
+  - name: search_jobs_with_details
+    description: |
+      RECOMMENDED: Search for jobs and automatically fetch full details for top results in a single operation.
+      Combines search_jobs + multiple get_job_details calls efficiently with automatic rate limiting.
+    params:
+      job_title: Job title or keywords (optional)
+      location: Location name (optional)
+      radius_km: Search radius in kilometers (optional)
+      employment_type: Employment type filter array (optional)
+      contract_type: Contract type filter array (optional)
+      published_since_days: Days since publication (optional)
+      page_size: Number of results per page (optional)
+      page: Page number for pagination (optional)
+      employer: Employer name (optional)
+      branch: Industry/branch (optional)
+      max_details: Number of jobs to fetch full details for (default 3, max 10) (optional)
+      fields: Field filtering to include/exclude specific fields (optional)
+  - name: batch_search_jobs
+    description: |
+      POWER TOOL: Perform multiple different job searches in a single operation.
+      Perfect for systematic comparison of employers, job types, or locations.
+      Includes automatic rate limiting (200ms between searches, 100ms between details).
+    params:
+      searches: Array of search configurations (max 5), each with name and all standard search parameters (required)
+      max_details_per_search: Details to fetch per search (default 2, max 5) (optional)
+      fields: Field filtering applied to all results (optional)
+  - name: get_server_status
+    description: Get server status, connection information, and API configuration details
+    params: {}
+
+metadata:
+  categories: Job Search, Recruitment, German Employment, Career Services, HR Tools
+  unsupportedTools: 
+icon: https://raw.githubusercontent.com/mihai-satmarean/jobsuche-mcp-server/main/logo.svg
+repoURL: https://github.com/mihai-satmarean/jobsuche-mcp-server
+
+env:
+  - key: JOBSUCHE_API_URL
+    name: Jobsuche API Base URL
+    required: false
+    sensitive: false
+    description: Custom API base URL (default uses official Bundesagentur für Arbeit API)
+  - key: JOBSUCHE_API_KEY
+    name: Jobsuche API Key
+    required: false
+    sensitive: true
+    description: Custom API key (default uses public API key)
+  - key: JOBSUCHE_DEFAULT_PAGE_SIZE
+    name: Default Page Size
+    required: false
+    sensitive: false
+    description: Default number of results per page (default 25)
+  - key: JOBSUCHE_MAX_PAGE_SIZE
+    name: Maximum Page Size
+    required: false
+    sensitive: false
+    description: Maximum number of results per page (default 100)
+
+runtime: containerized
+containerizedConfig:
+  image: 'ghcr.io/mihai-satmarean/jobsuche-mcp-server:latest'
+  port: 3000
+  path: '/mcp'
+  env:
+    JOBSUCHE_API_URL: "${JOBSUCHE_API_URL}"
+    JOBSUCHE_API_KEY: "${JOBSUCHE_API_KEY}"
+    JOBSUCHE_DEFAULT_PAGE_SIZE: "${JOBSUCHE_DEFAULT_PAGE_SIZE}"
+    JOBSUCHE_MAX_PAGE_SIZE: "${JOBSUCHE_MAX_PAGE_SIZE}"
+
