@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create app directory and user with UID 1000 (for Kubernetes securityContext)
-RUN mkdir -p /app && \
+RUN mkdir -p /app /app/tmp /app/logs && \
     groupadd -g 1000 appuser && \
     useradd -u 1000 -g appuser -s /bin/sh -d /app appuser && \
     chown -R 1000:1000 /app
@@ -35,7 +35,9 @@ COPY --from=builder /build/target/release/jobsuche-mcp-server /usr/local/bin/job
 ENV JOBSUCHE_API_URL="" \
     JOBSUCHE_API_KEY="" \
     JOBSUCHE_DEFAULT_PAGE_SIZE="25" \
-    JOBSUCHE_MAX_PAGE_SIZE="100"
+    JOBSUCHE_MAX_PAGE_SIZE="100" \
+    TMPDIR="/app/tmp" \
+    RUST_LOG="info"
 
 # MCP runs on stdio, but expose port for health checks
 EXPOSE 3000
