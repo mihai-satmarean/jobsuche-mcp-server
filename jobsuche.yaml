@@ -91,12 +91,12 @@ env:
     name: Default Page Size
     required: false
     sensitive: false
-    description: "Default number of results per page. Recommended: 25 (min: 1, max: 100)"
+    description: "Default number of results per page. Default: 25. IMPORTANT: Must be <= JOBSUCHE_MAX_PAGE_SIZE. Range: 1-100."
   - key: JOBSUCHE_MAX_PAGE_SIZE
     name: Maximum Page Size
     required: false
     sensitive: false
-    description: "Maximum number of results per page. Recommended: 100 (min: 1, max: 100)"
+    description: "Maximum number of results per page. Default: 100. IMPORTANT: Must be >= JOBSUCHE_DEFAULT_PAGE_SIZE. Range: 1-100."
 
 runtime: containerized
 containerizedConfig:
