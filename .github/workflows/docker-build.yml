@@ -124,4 +124,3 @@ jobs:
           kubectl rollout status deployment $DEPLOYMENT -n obot-mcp --timeout=300s
           
           echo "Deployment restarted successfully!"
-

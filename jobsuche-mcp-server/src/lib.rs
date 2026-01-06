@@ -12,7 +12,9 @@
 //! - **Comprehensive Details**: Get full job information including descriptions and requirements
 //! - **Pagination Support**: Handle large result sets efficiently
 
-use jobsuche::{Arbeitszeit, Credentials, JobDetails, JobSearchResponse, JobsucheAsync, SearchOptions};
+use jobsuche::{
+    Arbeitszeit, Credentials, JobDetails, JobSearchResponse, JobsucheAsync, SearchOptions,
+};
 use pulseengine_mcp_macros::{mcp_server, mcp_tools};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -587,23 +589,26 @@ impl JobsucheMcpServer {
         });
 
         // Format date ranges as strings
-        let entry_period = details.eintrittszeitraum.as_ref().map(|dr| {
-            match (&dr.von, &dr.bis) {
+        let entry_period = details
+            .eintrittszeitraum
+            .as_ref()
+            .map(|dr| match (&dr.von, &dr.bis) {
                 (Some(von), Some(bis)) => format!("{} - {}", von, bis),
                 (Some(von), None) => format!("ab {}", von),
                 (None, Some(bis)) => format!("bis {}", bis),
                 (None, None) => String::new(),
-            }
-        });
+            });
 
-        let publication_period = details.veroeffentlichungszeitraum.as_ref().map(|dr| {
-            match (&dr.von, &dr.bis) {
-                (Some(von), Some(bis)) => format!("{} - {}", von, bis),
-                (Some(von), None) => format!("ab {}", von),
-                (None, Some(bis)) => format!("bis {}", bis),
-                (None, None) => String::new(),
-            }
-        });
+        let publication_period =
+            details
+                .veroeffentlichungszeitraum
+                .as_ref()
+                .map(|dr| match (&dr.von, &dr.bis) {
+                    (Some(von), Some(bis)) => format!("{} - {}", von, bis),
+                    (Some(von), None) => format!("ab {}", von),
+                    (None, Some(bis)) => format!("bis {}", bis),
+                    (None, None) => String::new(),
+                });
 
         let result = GetJobDetailsResult {
             reference_number: params.reference_number.clone(),
@@ -625,11 +630,11 @@ impl JobsucheMcpServer {
             contract_duration: details.vertragsdauer,
             takeover_opportunity: None, // Not available in API v0.3.0
             job_type: details.stellenangebots_art,
-            open_positions: None,        // Not available in API v0.3.0
-            company_size: None,          // Not available in API v0.3.0
-            employer_description: None,  // Not available in API v0.3.0
-            branch: None,                // Not available in API v0.3.0
-            published_date: None,        // Not available in API v0.3.0
+            open_positions: None,       // Not available in API v0.3.0
+            company_size: None,         // Not available in API v0.3.0
+            employer_description: None, // Not available in API v0.3.0
+            branch: None,               // Not available in API v0.3.0
+            published_date: None,       // Not available in API v0.3.0
             first_published: details.erste_veroeffentlichungsdatum,
             only_for_disabled: details.nur_fuer_schwerbehinderte,
             fulltime: details.arbeitszeit_vollzeit,
@@ -801,7 +806,12 @@ impl JobsucheMcpServer {
             // Fetch details if requested (with delay to respect rate limits)
             let mut jobs_with_details = Vec::new();
             if max_details > 0 {
-                for (detail_idx, job) in search_result.jobs.iter().take(max_details as usize).enumerate() {
+                for (detail_idx, job) in search_result
+                    .jobs
+                    .iter()
+                    .take(max_details as usize)
+                    .enumerate()
+                {
                     // Small delay between detail fetches (except first in this search)
                     if detail_idx > 0 {
                         tokio::time::sleep(std::time::Duration::from_millis(100)).await;

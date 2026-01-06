@@ -72,7 +72,7 @@ toolPreview:
 
 metadata:
   categories: Job Search, Recruitment, German Employment, Career Services, HR Tools
-  unsupportedTools: 
+  unsupportedTools:
 icon: https://raw.githubusercontent.com/mihai-satmarean/jobsuche-mcp-server/main/logo.svg
 repoURL: https://github.com/mihai-satmarean/jobsuche-mcp-server
 
@@ -100,12 +100,11 @@ env:
 
 runtime: containerized
 containerizedConfig:
-  image: 'ghcr.io/mihai-satmarean/jobsuche-mcp-server:latest'
+  image: "ghcr.io/mihai-satmarean/jobsuche-mcp-server:latest"
   port: 3000
-  path: '/mcp'
+  path: "/mcp"
   env:
     JOBSUCHE_API_URL: "${JOBSUCHE_API_URL}"
     JOBSUCHE_API_KEY: "${JOBSUCHE_API_KEY}"
     JOBSUCHE_DEFAULT_PAGE_SIZE: "${JOBSUCHE_DEFAULT_PAGE_SIZE}"
     JOBSUCHE_MAX_PAGE_SIZE: "${JOBSUCHE_MAX_PAGE_SIZE}"
-
