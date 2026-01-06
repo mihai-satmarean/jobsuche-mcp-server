@@ -81,22 +81,22 @@ env:
     name: Jobsuche API Base URL
     required: false
     sensitive: false
-    description: Custom API base URL (default uses official Bundesagentur für Arbeit API)
+    description: "Custom API base URL. Leave empty to use default: https://rest.arbeitsagentur.de/jobboerse/jobsuche-service"
   - key: JOBSUCHE_API_KEY
     name: Jobsuche API Key
     required: false
     sensitive: true
-    description: Custom API key (default uses public API key)
+    description: "Custom API key. Leave empty to use public access (recommended for most users)"
   - key: JOBSUCHE_DEFAULT_PAGE_SIZE
     name: Default Page Size
     required: false
     sensitive: false
-    description: Default number of results per page (default 25)
+    description: "Default number of results per page. Recommended: 25 (min: 1, max: 100)"
   - key: JOBSUCHE_MAX_PAGE_SIZE
     name: Maximum Page Size
     required: false
     sensitive: false
-    description: Maximum number of results per page (default 100)
+    description: "Maximum number of results per page. Recommended: 100 (min: 1, max: 100)"
 
 runtime: containerized
 containerizedConfig:
