@@ -103,8 +103,3 @@ containerizedConfig:
   image: "ghcr.io/mihai-satmarean/jobsuche-mcp-server:latest"
   port: 3000
   path: "/mcp"
-  env:
-    JOBSUCHE_API_URL: "${JOBSUCHE_API_URL}"
-    JOBSUCHE_API_KEY: "${JOBSUCHE_API_KEY}"
-    JOBSUCHE_DEFAULT_PAGE_SIZE: "${JOBSUCHE_DEFAULT_PAGE_SIZE}"
-    JOBSUCHE_MAX_PAGE_SIZE: "${JOBSUCHE_MAX_PAGE_SIZE}"
