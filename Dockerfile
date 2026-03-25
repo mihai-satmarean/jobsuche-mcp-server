@@ -1,11 +1,10 @@
 # Multi-stage build for Jobsuche MCP Server
-# Stage 1: Build Rust binary with musl target (required for wolfi-base/chainguard compatibility)
+# Stage 1: Build Rust binary (standard glibc - wolfi-base uses glibc, not musl)
 FROM rust:1.88-bookworm AS builder
 
 WORKDIR /build
 
-RUN apt-get update && apt-get install -y musl-tools && rm -rf /var/lib/apt/lists/*
-RUN rustup target add x86_64-unknown-linux-musl
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files first (layer caching)
 COPY Cargo.toml Cargo.lock ./
@@ -14,14 +13,17 @@ COPY jobsuche-mcp-server/Cargo.toml ./jobsuche-mcp-server/
 # Copy source code
 COPY . .
 
-# Build static release binary
-RUN cargo build --release --target x86_64-unknown-linux-musl --bin jobsuche-mcp-server
+# Build release binary
+RUN cargo build --release --bin jobsuche-mcp-server
 
 # Stage 2: Nanobot wrapper runtime (obot-compatible containerized MCP)
 # Nanobot wraps the stdio MCP server and exposes it over HTTP on port 8099
+# Note: wolfi-base (chainguard) uses glibc, compatible with standard Rust builds
 FROM cgr.dev/chainguard/wolfi-base:latest
 
 USER root
+
+RUN apk add --no-cache glibc-locale-posix
 
 # Copy nanobot binary from the official nanobot image
 COPY --from=ghcr.io/nanobot-ai/nanobot:v0.0.58 /usr/local/bin/nanobot /usr/local/bin/nanobot
@@ -31,7 +33,7 @@ COPY scripts/nanobot.sh /usr/local/bin/nanobot.sh
 RUN chmod +x /usr/local/bin/nanobot.sh
 
 # Copy compiled binary from builder stage
-COPY --from=builder /build/target/x86_64-unknown-linux-musl/release/jobsuche-mcp-server /usr/local/bin/jobsuche-mcp-server
+COPY --from=builder /build/target/release/jobsuche-mcp-server /usr/local/bin/jobsuche-mcp-server
 
 # Create user and directories (UID 1000 required by obot security policy)
 RUN mkdir -p /home/user/.local/bin /home/user/.config/nanobot && \
