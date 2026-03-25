@@ -1,8 +1,11 @@
 # Multi-stage build for Jobsuche MCP Server
-# Stage 1: Build
-FROM rust:1.92-bookworm as builder
+# Stage 1: Build Rust binary with musl target (required for wolfi-base/chainguard compatibility)
+FROM rust:1.82-bookworm AS builder
 
 WORKDIR /build
+
+RUN apt-get update && apt-get install -y musl-tools && rm -rf /var/lib/apt/lists/*
+RUN rustup target add x86_64-unknown-linux-musl
 
 # Copy dependency files first (layer caching)
 COPY Cargo.toml Cargo.lock ./
@@ -11,43 +14,44 @@ COPY jobsuche-mcp-server/Cargo.toml ./jobsuche-mcp-server/
 # Copy source code
 COPY . .
 
-# Build release binary
-RUN cargo build --release --bin jobsuche-mcp-server
+# Build static release binary
+RUN cargo build --release --target x86_64-unknown-linux-musl --bin jobsuche-mcp-server
 
-# Stage 2: Runtime
-FROM debian:bookworm-slim
+# Stage 2: Nanobot wrapper runtime (obot-compatible containerized MCP)
+# Nanobot wraps the stdio MCP server and exposes it over HTTP on port 8099
+FROM cgr.dev/chainguard/wolfi-base:latest
 
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+USER root
 
-# Create app directory and user with UID 1000 (for Kubernetes securityContext)
-RUN mkdir -p /app /app/tmp /app/logs && \
-    groupadd -g 1000 appuser && \
-    useradd -u 1000 -g appuser -s /bin/sh -d /app appuser && \
-    chown -R 1000:1000 /app
+# Copy nanobot binary from the official nanobot image
+COPY --from=ghcr.io/nanobot-ai/nanobot:v0.0.58 /usr/local/bin/nanobot /usr/local/bin/nanobot
 
-# Copy binary from builder
-COPY --from=builder /build/target/release/jobsuche-mcp-server /usr/local/bin/jobsuche-mcp-server
+# Copy nanobot entrypoint script
+COPY scripts/nanobot.sh /usr/local/bin/nanobot.sh
+RUN chmod +x /usr/local/bin/nanobot.sh
 
-# Set environment defaults (can be overridden)
+# Copy compiled binary from builder stage
+COPY --from=builder /build/target/x86_64-unknown-linux-musl/release/jobsuche-mcp-server /usr/local/bin/jobsuche-mcp-server
+
+# Create user and directories (UID 1000 required by obot security policy)
+RUN mkdir -p /home/user/.local/bin /home/user/.config/nanobot && \
+    chown -R 1000:0 /home/user && \
+    chown -R 1000:0 /usr/local
+
+USER 1000
+
+ENV HOME=/home/user
+ENV DOCKER_CONTAINER=true
 ENV JOBSUCHE_API_URL="" \
     JOBSUCHE_API_KEY="" \
     JOBSUCHE_DEFAULT_PAGE_SIZE="25" \
     JOBSUCHE_MAX_PAGE_SIZE="100" \
-    TMPDIR="/app/tmp" \
     RUST_LOG="info"
 
-# MCP runs on stdio, but expose port for health checks
-EXPOSE 3000
+# Nanobot listens on 8099 (obot containerized runtime convention)
+EXPOSE 8099
 
-# Switch to non-root user
-USER 1000
+WORKDIR /home/user
 
-# Set working directory
-WORKDIR /app
-
-# Run the MCP server
-CMD ["jobsuche-mcp-server"]
-
+# nanobot.sh wraps the stdio server and exposes it over HTTP
+ENTRYPOINT ["nanobot.sh", "jobsuche-mcp-server"]

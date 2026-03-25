@@ -7,18 +7,10 @@ on:
         description: 'Deployment name (leave empty to auto-detect)'
         required: false
         type: string
-  workflow_run:
-    workflows: ["Build and Push Jobsuche MCP Server Docker Image"]
-    types:
-      - completed
-    branches:
-      - main
-      - master
 
 jobs:
   restart-deployment:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     
     steps:
       - name: Setup kubectl
@@ -70,4 +62,5 @@ jobs:
           echo ""
           echo "Current pod status:"
           kubectl get pods -n obot-mcp -l app=$DEPLOYMENT -o wide
+
 
