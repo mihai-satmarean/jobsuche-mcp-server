@@ -1,6 +1,6 @@
 # Multi-stage build for Jobsuche MCP Server
 # Stage 1: Build Rust binary with musl target (required for wolfi-base/chainguard compatibility)
-FROM rust:1.82-bookworm AS builder
+FROM rust:1.85-bookworm AS builder
 
 WORKDIR /build
 
